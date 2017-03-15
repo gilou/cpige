@@ -21,6 +21,7 @@ typedef struct commandLine
   char *logFile;
   char *pidFile;
   char *Next;
+  char *filePattern;
   int pige;
   int quiet;
   int live;

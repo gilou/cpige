@@ -367,12 +367,22 @@ int main (int argc, char **argv)
             case IVAL_HOUR:
               last_cut.hour = getCloserInterval(getHour(), cmdLine->interval);
               last_cut.min  = getCloserInterval(getMinute(), 60);
+              if (cmdLine->filePattern)
+              {
+		char *pfilename = getFileName(cmdLine->filePattern);
+                len1 = strlen(dir) + 1 + strlen(extension) + strlen(pfilename) + 1;
+                filename = (char *)memory_allocation(len1);
+                snprintf(filename, len1, "%s%s.%s", dir, pfilename, extension);
+                break;
+              }
+              else
+              {
+                len1 = strlen(dir) + 1 + strlen(extension) + 4 + 2 + 2 + 1;
+                filename = (char *)memory_allocation(len1);
+                snprintf(filename, len1, "%s%.4d%.2d%.2d.%s", dir, getYear()+1900, getMonth()+1, last_cut.hour, extension);
+                break;
+              }
 
-              len1 = strlen(dir) + 1 + strlen(extension) + 2 + 1;
-              filename = (char *)memory_allocation(len1);
-              snprintf(filename, len1, "%s%.2d.%s", dir, last_cut.hour, extension);
-              break;
-              
             case IVAL_MIN:
               last_cut.min  = getCloserInterval(getMinute(), cmdLine->interval);
               last_cut.hour = getCloserInterval(getHour(), 1);
@@ -390,6 +400,8 @@ int main (int argc, char **argv)
 
           (void)free(dir);
 
+
+          fprintf(stderr, "filePattern is %s, filename is %s\n", cmdLine->filePattern, filename);
           if ((output_file = fopen(filename, "r")) != NULL)
           {
             VERBOSE("Erasing %s\n", filename);
@@ -1011,6 +1023,7 @@ commandLine *parseCommandLine(int argc, char **argv)
   cmdLine->logFile    = "cpige.log";
   cmdLine->dir        = NULL;
   cmdLine->Next       = "A suivre";
+  cmdLine->filePattern       = NULL;
   
   for (i = 1; i < argc; i++)
   {
@@ -1219,6 +1232,7 @@ commandLine *parseCommandLine(int argc, char **argv)
 #endif
   set_str_from_conf(conf,  "logfile",   &(cmdLine->logFile), "./cpige.log", NULL, 0);
   set_str_from_conf(conf,  "nexttitle", &(cmdLine->Next),    "A suivre",    NULL, 0);
+  set_str_from_conf(conf,  "filepattern", &(cmdLine->filePattern),    "",    NULL, 0);
 
 #ifndef WIN32
   set_str_from_conf(conf,  "locale", &buffer, "C", NULL, 0);

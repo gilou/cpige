@@ -9,6 +9,7 @@ int getHour();
 int getMonth();
 int getYear();
 char *getDayName(time_t when);
+char *getFileName(char *pattern);
 struct tm *getLocalTime(time_t *when);
 
 #ifdef WIN32

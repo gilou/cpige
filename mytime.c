@@ -48,6 +48,20 @@ int getHour()
   return hour;
 }
 
+char *getFileName(char* pattern)
+{
+  struct tm *mytime;
+  char *filename;
+
+  mytime = getLocalTime((time_t *)NULL);
+  filename = (char *)calloc(20, 1);
+  strftime(filename, 200, pattern, mytime);
+#ifndef WIN32
+  free(mytime);
+#endif
+  return filename;
+}
+
 #ifndef WIN32
 char *getDayName(time_t when)
 {
