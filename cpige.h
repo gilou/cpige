@@ -1,4 +1,4 @@
-#define VERSION "1.5"
+#define VERSION "1.6-time"
 
 #define IVAL_HOUR 1
 #define IVAL_MIN  2

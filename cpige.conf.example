@@ -126,3 +126,8 @@ nexttitle = "A suivre"
 // To do so, uncomment the following line
 //
 //timetostop = "1m"
+
+// Pattern for the names, passed through strftime
+// Probably not too nice to have this set with weekbackup != 0
+filepattern = "%Y%m%d-%H"
+
